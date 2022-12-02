@@ -52,11 +52,16 @@ const savedPersistStore: PersistStore = rawPersistStore
 interface UIStateInterface {
   enableAutoShuffle: boolean;
   pickAmount?: number;
+  disableDuplicatePage: boolean;
 }
 const UIState: UIStateInterface = {
   enableAutoShuffle: true,
   pickAmount: 5,
+  disableDuplicatePage: false,
 };
+
+const randOpened = String(Math.random())
+localStorage.setItem('opened', randOpened)
 
 function App() {
   const [parentDivShuffle] =
@@ -175,19 +180,36 @@ function App() {
   );
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (uiState.enableAutoShuffle) {
-        setStoreByKey("pool", [...shuffle(store.pool)].filter(onlyUnique));
-      }
-    }, 2000);
+    if (uiState.disableDuplicatePage) {
+      return
+    }
+    let timer: NodeJS.Timeout
+    if (localStorage.getItem('opened') !== randOpened) {
+      setUiStateByKey('disableDuplicatePage', true)
+    } else {
+      timer = setTimeout(() => {
+        if (uiState.enableAutoShuffle) {
+          setStoreByKey("pool", [...shuffle(store.pool)].filter(onlyUnique));
+        }
+      }, 2000);
+    }
     return () => {
-      clearTimeout(timer);
+      timer && clearTimeout(timer);
     };
-  }, [uiState, setStoreByKey, store]);
+  }, [uiState, setStoreByKey, store, setUiStateByKey]);
 
   useEffect(() => {
     window.localStorage.setItem(keyPersistStore, JSON.stringify(store));
   }, [store]);
+
+  if (uiState.disableDuplicatePage) {
+    return (
+      <main className="container" style={{textAlign: 'center'}}>
+        <h1>You can't open this page on multiple tabs in same times. Please close this tab.</h1>
+      </main>
+    )
+  }
+
   return (
     <main className="container">
       <div className="grid">
