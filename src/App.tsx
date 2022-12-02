@@ -316,7 +316,7 @@ function App() {
           </div>
 
           {store.pool.length === 0 ? (
-            <blockquote>Please add some text/number on above form.</blockquote>
+            <blockquote>Please add some number on below form.</blockquote>
           ) : (
             <blockquote>ℹ️ Click on box to remove it.</blockquote>
           )}
