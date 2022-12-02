@@ -1,5 +1,9 @@
 # PG Party Toolkit
 
+![CI workflow](https://github.com/ethaizone/pg-party-toolkit/actions/workflows/build-to-gh-pages.yml/badge.svg)
+
+Here is our [toolkit](https://ethaizone.github.io/pg-party-toolkit/). Try now!
+
 I created this one because I hope it can be use in new year party in PropertyGuru Thailand branch. TBH. I just want to play it with Github actions. LOL
 
 Now I did quick lottery picker only. In future is not sure. Repo is dirty because I worked from scratch with 5 hours only.
