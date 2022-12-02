@@ -258,7 +258,7 @@ function App() {
         </div>
 
         <div ref={parentDiv}>
-          <h2>Lottery pool</h2>
+          <h2>Lucky Draw Pool</h2>
 
 
 
