@@ -384,7 +384,7 @@ function App() {
         </ul>
       </div>
       {
-        store.pastWinner.length > 0 && (
+        (store.pastWinner.length > 0 || store.pool.length > 0) && (
           <button style={{ backgroundColor: "red" }} onClick={onReset}>
             💣 RESET!! 💣
           </button>
