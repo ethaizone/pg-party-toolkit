@@ -282,6 +282,7 @@ function App() {
               <button type="submit">
                 Pick {uiState.pickAmount || "?"} Winner 🏆
               </button>
+              <h4>Current lottery in pool: {store.pool.length}</h4>
             </form>
           )}
 
