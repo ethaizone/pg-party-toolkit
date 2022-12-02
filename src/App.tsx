@@ -52,11 +52,13 @@ const savedPersistStore: PersistStore = rawPersistStore
 interface UIStateInterface {
   enableAutoShuffle: boolean;
   pickAmount?: number;
+  playerAmount?: number;
   disableDuplicatePage: boolean;
 }
 const UIState: UIStateInterface = {
   enableAutoShuffle: true,
   pickAmount: 5,
+  playerAmount: undefined,
   disableDuplicatePage: false,
 };
 
@@ -131,9 +133,26 @@ function App() {
         ...store,
         input: "",
         pool,
-      });
+      })
+      setUiStateByKey('playerAmount', undefined)
     },
-    [store]
+    [setUiStateByKey, store]
+  );
+
+  const onAddByPlayerIntoPool = useCallback<React.FormEventHandler<HTMLFormElement>>(
+    (event) => {
+      event.preventDefault();
+      const cleaned = Array((uiState.playerAmount || 0) + 1).keys();
+      const pool = [...cleaned].splice(1);
+      console.log(pool);
+      setStore({
+        ...store,
+        input: "",
+        pool,
+      })
+      setUiStateByKey('playerAmount', undefined)
+    },
+    [setUiStateByKey, store, uiState.playerAmount]
   );
 
   const onFlushIntoPastWinner = useCallback<
@@ -212,6 +231,9 @@ function App() {
 
   return (
     <main className="container">
+      <div style={{textAlign: 'center'}}>
+        <h1>PG Year End Party 2022 Lucky Draw Pool</h1>
+      </div>
       <div className="grid">
         <div>
           <h2>Winner!</h2>
@@ -237,6 +259,31 @@ function App() {
 
         <div ref={parentDiv}>
           <h2>Lottery pool</h2>
+
+
+
+          {store.pool.length > 0 && (
+            <form onSubmit={onPickWinner}>
+              <input
+                type="number"
+                id="pick_amount"
+                name="pick_amount"
+                placeholder="Put amount to pick from pool."
+                required
+                value={uiState.pickAmount || ""}
+                onChange={(e) =>
+                  setUiStateByKey(
+                    "pickAmount",
+                    e.target.value ? parseInt(e.target.value, 10) : undefined
+                  )
+                }
+                max={store.pool.length}
+              />
+              <button type="submit">
+                Pick {uiState.pickAmount || "?"} Winner 🏆
+              </button>
+            </form>
+          )}
 
           <div
             ref={parentDivShuffle}
@@ -266,47 +313,63 @@ function App() {
               );
             })}
           </div>
+
           {store.pool.length === 0 ? (
-            <blockquote>Please add some text/number on below form.</blockquote>
+            <blockquote>Please add some text/number on above form.</blockquote>
           ) : (
             <blockquote>ℹ️ Click on box to remove it.</blockquote>
           )}
 
-          {store.pool.length > 0 && (
-            <form onSubmit={onPickWinner}>
+
+{/*
+          <div style={{marginBottom: '20px'}}>OR</div>
+ */}
+
+
+        </div>
+      </div>
+
+      <h2>Add players.</h2>
+
+      <div className="grid">
+        <div>
+          <form onSubmit={onAddByPlayerIntoPool}>
+            <div>
               <input
                 type="number"
-                id="pick_amount"
-                name="pick_amount"
-                placeholder="Put amount to pick from pool."
+                id="player_amount"
+                name="player_amount"
+                placeholder="Put player to pool. It will create start from 1 to n."
                 required
-                value={uiState.pickAmount || ""}
+                min={1}
+                value={uiState.playerAmount || ""}
                 onChange={(e) =>
                   setUiStateByKey(
-                    "pickAmount",
+                    "playerAmount",
                     e.target.value ? parseInt(e.target.value, 10) : undefined
                   )
                 }
-                max={store.pool.length}
               />
-              <button type="submit">
-                Pick {uiState.pickAmount || "?"} Winner 🏆
-              </button>
-            </form>
-          )}
-          <form onSubmit={onAddIntoPool}>
-            <div>
-              <textarea
-                onChange={(e) => setStoreByKey("input", e.target.value)}
-                value={store.input}
-                placeholder="Add one per line. Press enter for new line."
-                rows={store.input.split("\n").length}
-              />
-              { store.input.split("\n").filter(c => c).length > 0 && (
-                <button type="submit">Add into pool. 🎱</button>
+              { (uiState.playerAmount || 0) > 0 && (
+                <button type="submit">Add {uiState.playerAmount} player(s) into pool. 🎱</button>
               )}
             </div>
           </form>
+        </div>
+        <div>
+          <form onSubmit={onAddIntoPool}>
+              <div>
+                <textarea
+                  onChange={(e) => setStoreByKey("input", e.target.value)}
+                  value={store.input}
+                  placeholder="Add one per line. Press enter for new line."
+                  rows={store.input.split("\n").length}
+                />
+                { store.input.split("\n").filter(c => c).length > 0 && (
+                  <button type="submit">Add into pool. 🎱</button>
+                )}
+              </div>
+            </form>
         </div>
       </div>
 
