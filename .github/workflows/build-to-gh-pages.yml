@@ -31,8 +31,8 @@ jobs:
         uses: bitovi/github-actions-react-to-ghp@v1.2.0
         with:
           # Specifies if this action should checkout the code
-          checkout: true, default is true
+          checkout: true
           # Specifies the path of the static assets after building
-          path: dist, default is dist
+          path: "build"
           # Specifies the command to run after npm ci for the build
-          build_command: yarn, default is npm run build
+          build_command: "yarn build"
