@@ -297,9 +297,13 @@ function App() {
           ))}
         </ul>
       </div>
-      <button style={{ backgroundColor: "red" }} onClick={onReset}>
-        💣 RESET!! 💣
-      </button>
+      {
+        store.pastWinner.length > 0 && (
+          <button style={{ backgroundColor: "red" }} onClick={onReset}>
+            💣 RESET!! 💣
+          </button>
+        )
+      }
     </main>
   );
 }
