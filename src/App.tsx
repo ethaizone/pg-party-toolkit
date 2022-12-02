@@ -232,7 +232,7 @@ function App() {
   return (
     <main className="container">
       <div style={{textAlign: 'center'}}>
-        <h1>PG Year End Party 2022 Lucky Draw Pool</h1>
+        <h1>PG Year End Party 2022 Lucky Draw</h1>
       </div>
       <div className="grid">
         <div>
